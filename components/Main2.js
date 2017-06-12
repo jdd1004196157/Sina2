@@ -164,7 +164,7 @@ module.exports= class Main extends Component {
 
         return (
             <div style={styles.root}>
-                <div style={styles.head}><span>全新启动时间DashBoard</span></div>
+                <div style={styles.head}><span>全新启动时间</span></div>
                 <ul style={styles.nav}>
                     <li style={styles.navDetail1}> </li>
                     <li style={styles.navDetail1}> </li>
