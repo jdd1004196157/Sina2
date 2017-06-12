@@ -1,0 +1,598 @@
+全链路性能分析接口文档：
+获取元数据：
+	1.接口名：/getmetadata
+	说明：获取元数据
+	参数：无(或者加上版本)
+	返回值:
+	{
+		systemversion:[
+		"10.1",
+		"10.2",
+		"10.3",
+		...
+		],
+		appversion:[
+		"7.0.0",
+		"7.1.0",
+		"7.2.0",
+		"7.3.0",
+		...
+		],
+		bussinesstype:[
+		"Feed",
+		"多媒体",
+		...
+		]
+	}
+总览页面接口（优先级高）:
+	1.接口名：/overview/average/
+	说明：获取一段时间内的平均时间，成功率，请求次数（用于总览页面上方tab）
+	参数：
+	{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		phonetype:iphone/android/all,//缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		appversion:[  //缺失此参数默认为all
+		7.3.0,
+		7.3.1, 
+		...   
+		],
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+	}
+	返回值:
+	{
+		fulllink:{
+			hits:20000,//请求次数
+			averagetime:1.743,//平均响应时间,单位秒
+			successrate:0.823//成功率
+		},
+		client:{
+			averagetime:1.743,//平均响应时间,单位秒
+			successrate:0.823//成功率
+
+		},
+		mapi:{
+			averagetime:1.743,//平均响应时间,单位秒
+			successrate:0.823//成功率
+		},
+		platform:{
+			averagetime:1.743,//平均响应时间,单位秒
+			successrate:0.823//成功率
+		}
+	}
+	2.接口名:/overview/responsetime/general
+	说明:获取响应时间的模块化结果
+	参数：
+	{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		timegranularity:daily/weekly, //必填，时间粒度
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		appversion:[  //缺失此参数默认为all
+		7.3.0,
+		7.3.1, 
+		...   
+		],
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+	}
+	返回值:
+	{
+		[{
+			datetime:20170304,//日期时间戳
+			client:0.34,//客户端响应时间，单位秒
+			mapi:0.234,//mapi响应时间，单位秒
+			platform:0.384//平台响应时间，单位秒
+		},
+		{
+			datetime:20170305,
+			client:0.34,
+			mapi:0.234,
+			platform:0.384//平台响应
+		},
+		{
+			datetime:20170306,
+			client:0.34,
+			mapi:0.234,
+			platform:0.384//平台响应
+		},
+		...
+		]
+	}
+	3.接口名:/overview/responsetime/detail
+	说明:获取响应时间的每个模块的细节结果
+	参数：
+	{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		timegranularity:daily/weekly, //必填，时间粒度
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		appversion:[  //缺失此参数默认为all
+		7.3.0,
+		7.3.1, 
+		...   
+		],
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+	}
+	返回值:
+	{
+		[
+		{
+			datetime:20170305,
+			client:[     //字段解析后对应的显示名，请参见对照表
+				lw:0.023,
+				ds:0.024,
+				ssc:0.234,
+				...
+
+			],
+			mapi:[		//拆分后待定
+				xx:0.034,
+				...
+			],
+			platform:[	//拆分后待定
+			]
+		},
+		{
+			datetime:20170306,
+			client:[     //字段解析后对应的显示名，请参见对照表
+				lw:0.023,
+				ds:0.024,
+				ssc:0.234,
+				...
+			],
+			mapi:[		//拆分后待定
+				xx:0.034,
+				...
+			],
+			platform:[	//拆分后待定
+			]
+		},
+		...
+		]
+	}
+	4.接口名:/overview/responsetime/comparedetail
+	说明:获取响应时间的每个模块的细节结果
+	参数：
+	{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		timegranularity:daily/weekly, //必填，时间粒度
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		appversion:[  //缺失此参数默认为all
+		7.3.0,
+		7.3.1, 
+		...   
+		],
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+	}
+	返回值:
+	{
+		[
+			client:[     //字段解析后对应的显示名，请参见对照表
+				lw:{
+					startresult:0.03,
+					endresult:0.12
+				},
+				ds:{
+					startresult:0.03,
+					endresult:0.12
+				},
+				ssc:{
+					startresult:0.03,
+					endresult:0.12
+				},
+				...
+			],
+			mapi:[		//拆分后待定,格式同上
+				...
+			],
+			platform:[	//拆分后待定，格式同上
+			]
+		}		
+		]
+	}
+	5.接口名:/overview/timedistribution/slowspeedrate
+	说明:获取一段时间内每个时间段的慢速比
+	参数：
+	{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		timegranularity:daily/weekly, //必填，时间粒度
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		appversion:[  //缺失此参数默认为all
+		7.3.0,
+		7.3.1, 
+		...   
+		],
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+	}
+	返回值:
+	{
+		[{
+			datetime:20170401,
+			fulllink:0.234, //慢速的请求占总请求数的比例
+			client:0.103,	//慢速的请求占总请求数的比例
+			platform:0.043,	//慢速的请求占总请求数的比例
+			mapi:0.231,     //慢速的请求占总请求数的比例
+		},
+		{
+			datetime:20170402,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},	
+		{
+			datetime:20170403,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},		
+		]
+	}
+	6.接口名:/overview/timedistribution/distribution
+	说明:获取一段时间内每个时间段请求时间的分布
+	参数：
+	{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		appversion:[  //缺失此参数默认为all
+		7.3.0,
+		7.3.1, 
+		...   
+		],
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+	}
+	返回值:
+	{
+		[{
+			timebucket:0-1s,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},
+		{
+			timebucket:1-2s,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},	
+		{
+			timebucket:2-3s,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},
+		{
+			timebucket:3-4s,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},
+		{
+			timebucket:4-5s,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},	
+		{
+			timebucket:>5s,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		}]
+	}
+	7.接口名:/overview/successrate/
+	说明:获取一段时间以内的成功率
+	参数：
+	{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		timegranularity:daily/weekly, //必填，时间粒度
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		appversion:[  //缺失此参数默认为all
+		7.3.0,
+		7.3.1, 
+		...   
+		],
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+	}
+	返回值:
+	{
+		[{
+			datetime:20170401,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},
+		{
+			datetime:20170402,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},	
+		{
+			datetime:20170403,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},
+		{
+			datetime:20170404,
+			fulllink:0.234,
+			client:0.103,	
+			platform:0.043,
+			mapi:0.231,
+		},
+		...
+		]
+	}
+	8.接口名:/overview/mapinfo/  
+	说明:获取地图展示信息
+	参数：
+	{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		timegranularity:daily/weekly, //必填，时间粒度
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		appversion:[  //缺失此参数默认为all
+		7.3.0,
+		7.3.1, 
+		...   
+		],
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+	}
+	返回值:
+	{
+		[{
+			province:辽宁,
+			fulllinktime:2.34//总耗时
+		},
+		...
+		]
+	}
+
+客户端页面:
+	1.接口名:client/responsetime/general
+	说明:获取客户端细分的平均耗时
+	参数:{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		startappversion:7.0.0,
+		endappvversion:7.4.1,
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+
+	}
+	返回值:{
+		[
+			{
+			appversion:7.0.0,
+			lw:0.423,  //细分耗时
+			ds:0.432,
+			ssc:0.231,
+			...
+			},
+			{
+			appversion:7.1.0,
+			lw:0.423,  //细分耗时
+			ds:0.432,
+			ssc:0.231,
+			...
+			},
+			...
+		]
+	}
+	2.接口名:client/responsetime/withoutreconnect
+	说明:获取客户端细分的平均耗时(剔除重连的请求，即sch字段为true的)
+	参数:{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		startappversion:7.0.0,
+		endappvversion:7.4.1,
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+
+	}
+	返回值:{
+		[
+			{
+			appversion:7.0.0,
+			lw:0.423,  //细分耗时
+			ds:0.432,
+			ssc:0.231,
+			...
+			},
+			{
+			appversion:7.1.0,
+			lw:0.423,  //细分耗时
+			ds:0.432,
+			ssc:0.231,
+			...
+			},
+			...
+		]
+	}
+	4.接口名:client/compare
+	说明:客户端耗时变化比较
+	参数:{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		startappversion:7.0.0,
+		endappvversion:7.4.1,
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+
+	}
+	返回值:{
+			lw:{
+				startresult:0.03, //起始版本的平均耗时
+				endresult:0.12	  //结束版本的平均耗时
+			},
+			ds:{
+				startresult:0.03,
+				endresult:0.12
+			},
+			ssc:{
+				startresult:0.03,
+				endresult:0.12
+			},
+			...
+	}
+	5.接口名:client/systemversion/
+	说明:各系统版本的客户端耗时比较
+	参数:{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		startappversion:7.0.0,
+		endappvversion:7.4.1,
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+
+	}
+	返回值:{
+		[
+			{
+			appversion:7.0.0,
+			os10.2.1:0.423,  //对应app版本的系统版本的客户端平均耗时
+			os10.2.0:0.432,
+			安卓7.3:0.231,
+			...
+			},
+			{
+			appversion:7.1.0,
+			os10.2.1:0.423,  //对应app版本的系统版本的客户端平均耗时
+			os10.2.0:0.432,
+			安卓7.3:0.231,
+			...			
+			},
+			...
+		]
+	}
+	6.接口名:client/reconnectrate/
+	说明:各客户端版本链接复用的占比
+	参数:{
+		startdate:20170401, //必填
+		enddate:20170515,	//必填
+		bussinesstype:feed, //必填
+		phonetype:iphone, //缺失此参数默认为all
+		nettype:wifi, 	//缺失此参数默认为all
+		startappversion:7.0.0,
+		endappvversion:7.4.1,
+		systemversion:[ //缺失此参数默认为all
+		os7.2.1,
+		os7.2.2,
+		os7.2.3,
+		...
+		]
+
+	}
+	返回值:{
+		[
+			{
+			appversion:7.0.0,
+			reconnectrate:0.632//sch:为true的字段占比
+			},
+			{
+			appversion:7.1.0,
+			reconnectrate:0.632
+			},
+			...
+		]
+	}
+
