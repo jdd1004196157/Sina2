@@ -29,7 +29,6 @@ export default class Pandect extends Component {
     }
 
     _onChange2(){
-        console.log('listen TimeTrendStore')
         this.setState(TimeTrendStore)
     }
     render() {

@@ -12,6 +12,8 @@ import PandectChoose from './PandectChoose'
 import TimeDis from './TimeDis'
 import TimeTrend from './TimeTrend'
 import { Spin, Alert } from 'antd';
+import { Tooltip } from 'antd';
+import { Row, Col } from 'antd';
 
 export default class Pandect extends Component {
 
@@ -20,10 +22,14 @@ export default class Pandect extends Component {
         this.state = {
             para:ChooseStore.data.pansect.PortData,
         }
-
+        this._onChange1 = () => {
+            if(this.mounted){
+                this.setState(ChooseStore)
+            }
+        };
     }
     componentWillMount() {
-
+        ChooseStore.addChangeListener(this._onChange1.bind(this))
     }
 
     render() {
@@ -78,10 +84,10 @@ export default class Pandect extends Component {
             card2:{
                 float:'left',
                 width:'49%',
-                height:100,
+                height:150,
                 background:'rgba(65, 75, 95, 0.7)',
                 borderRadius: 5,
-                fontSize:20,
+                fontSize:24,
                 color:'white',
                 textAlign:'center',
                 verticalAlign:'middle',
@@ -93,10 +99,10 @@ export default class Pandect extends Component {
             card3:{
                 float:'left',
                 width:'49%',
-                height:100,
+                height:150,
                 background:'rgba(65, 75, 95, 0.7)',
                 borderRadius: 5,
-                fontSize:20,
+                fontSize:24,
                 color:'white',
                 textAlign:'center',
                 verticalAlign:'middle',
@@ -106,10 +112,10 @@ export default class Pandect extends Component {
                 marginRight:'0',
             },
             span:{
-                height:'40px',
-                lineHeight:'40px',
+                height:'70px',
+                lineHeight:'70px',
                 margin:'auto',
-                fontSize:16,
+                fontSize:20,
                 verticalAlign:'middle'
             },
 
@@ -126,23 +132,40 @@ export default class Pandect extends Component {
             col:{
                 padding:'10px 0px'
             },
+            p2:{
+                flex:'0 0 80px',
+                fontSize:'12px',
+                fontWeight:'20',
+                margin:'0 5px',
+                width:'150px'
+            },
 
         }
         let stotal=''
         let snet=''
-        for(let i=0;i<this.props.data.paneldata.dataArr.length;i++){
-            if(this.props.data.paneldata.dataArr[i].name=='stotal'){
-                if(this.props.data.paneldata.title.length>1){
-                    stotal=this.props.data.paneldata.dataArr[i].data[0]+'s ('+this.props.data.paneldata.title[0]+')  VS  '+this.props.data.paneldata.dataArr[i].data[1]+'s ('+this.props.data.paneldata.title[0]+')'
-                }else{
-                    stotal=this.props.data.paneldata.dataArr[i][0]+'s(All)'
-                }
+        if(this.props.data.paneldata.dataArr.length==0){
+            if(this.props.data.paneldata.title.length>1){
+                stotal=0+'s ('+this.props.data.paneldata.title[0]+')  VS  0'+'s ('+this.props.data.paneldata.title[1]+')'
+                snet=0+'s ('+this.props.data.paneldata.title[0]+')  VS  0'+'s ('+this.props.data.paneldata.title[1]+')'
+            }else{
+                stotal=0+'s(All)'
+                snet=0+'s(All)'
             }
-            if(this.props.data.paneldata.dataArr[i].name=='snet'){
-                if(this.props.data.paneldata.title.length>1){
-                    snet=this.props.data.paneldata.dataArr[i].data[0]+'s ('+this.props.data.paneldata.title[0]+')  VS  '+this.props.data.paneldata.dataArr[i].data[1]+'s ('+this.props.data.paneldata.title[0]+')'
-                }else{
-                    snet=this.props.data.paneldata.dataArr[i][0]+'s(All)'
+        }else{
+            for(let i=0;i<this.props.data.paneldata.dataArr.length;i++){
+                if(this.props.data.paneldata.dataArr[i].name=='stotal'){
+                    if(this.props.data.paneldata.title.length>1){
+                        stotal=this.props.data.paneldata.dataArr[i].data[0]+'s ('+this.props.data.paneldata.title[0]+')  VS  '+this.props.data.paneldata.dataArr[i].data[1]+'s ('+this.props.data.paneldata.title[1]+')'
+                    }else{
+                        stotal=this.props.data.paneldata.dataArr[i].data[0]+'s(All)'
+                    }
+                }
+                if(this.props.data.paneldata.dataArr[i].name=='snet'){
+                    if(this.props.data.paneldata.title.length>1){
+                        snet=this.props.data.paneldata.dataArr[i].data[0]+'s ('+this.props.data.paneldata.title[0]+')  VS  '+this.props.data.paneldata.dataArr[i].data[1]+'s ('+this.props.data.paneldata.title[1]+')'
+                    }else{
+                        snet=this.props.data.paneldata.dataArr[i].data[0]+'s(All)'
+                    }
                 }
             }
         }
@@ -150,15 +173,907 @@ export default class Pandect extends Component {
 
         const true1=true
         console.log('render ')
-        let hh=(
-            <div>
-                <div style={{width:'10%',height:'20%',background:'rgb(108,121,137)',float:'left',margin:'2px'}}></div>
-                <div style={{width:'8%',height:'20%',background:'rgb(152,197,204)',float:'left',margin:'2px'}}></div>
-                <div style={{width:'23%',height:'20%',background:'rgb(235,197,84)',float:'left',margin:'2px'}}></div>
-                <div style={{width:'11%',height:'20%',background:'rgb(220,114,98)',float:'left',margin:'2px'}}></div>
-                <div style={{width:'11%',height:'20%',background:'rgb(172,191,170)',float:'left',margin:'2px'}}></div>
-            </div>
-        )
+
+        let sum1=0;
+        let app_init_cost1=0;
+        let splash_cost1=0;
+        let wback_cost1=0;
+        let show_ad_cost1=0;
+        let load_feed_cost1=0;
+        let permission_cost1=0;
+        let app_init_cost1_value=0;
+        let splash_cost1_value=0;
+        let wback_cost1_value=0;
+        let show_ad_cost1_value=0;
+        let load_feed_cost1_value=0;
+        let permission_cost1_value='';
+        let sum2=0;
+        let app_init_cost2=0;
+        let splash_cost2=0;
+        let wback_cost2=0;
+        let show_ad_cost2=0;
+        let load_feed_cost2=0;
+        let permission_cost2=0;
+        let app_init_cost2_value=0;
+        let splash_cost2_value=0;
+        let wback_cost2_value=0;
+        let show_ad_cost2_value=0;
+        let load_feed_cost2_value=0;
+
+
+        let permission_cost2_value='';
+        for(let i=0;i<this.props.data.timeConsumeAverage.dataArr.length;i++){
+            sum1 += this.props.data.timeConsumeAverage.dataArr[i].data[0]
+            if(this.props.data.timeConsumeAverage.title.length>1){
+                sum2 += this.props.data.timeConsumeAverage.dataArr[i].data[1]
+            }
+        }
+        for(let i=0;i<this.props.data.timeConsumeAverage.dataArr.length;i++){
+            if(this.props.data.timeConsumeAverage.dataArr[i].name=='app_init_cost'){
+                app_init_cost1_value=this.props.data.timeConsumeAverage.dataArr[i].data[0]
+                app_init_cost1=(this.props.data.timeConsumeAverage.dataArr[i].data[0]*100/sum1).toFixed(2)
+                if(this.props.data.timeConsumeAverage.title.length>1) {
+                    app_init_cost2_value=this.props.data.timeConsumeAverage.dataArr[i].data[1]
+                    app_init_cost2 = (this.props.data.timeConsumeAverage.dataArr[i].data[1] *100/ sum2).toFixed(2)
+                }
+            }
+            if(this.props.data.timeConsumeAverage.dataArr[i].name=='splash_cost'){
+                splash_cost1_value=this.props.data.timeConsumeAverage.dataArr[i].data[0]
+                splash_cost1=(this.props.data.timeConsumeAverage.dataArr[i].data[0]*100/sum1).toFixed(2)
+                if(this.props.data.timeConsumeAverage.title.length>1) {
+                    splash_cost2_value=this.props.data.timeConsumeAverage.dataArr[i].data[1]
+                    splash_cost2 = (this.props.data.timeConsumeAverage.dataArr[i].data[1]*100 / sum2).toFixed(2)
+                }
+            }
+            if(this.props.data.timeConsumeAverage.dataArr[i].name=='wback_cost'){
+                wback_cost1_value=this.props.data.timeConsumeAverage.dataArr[i].data[0]
+                wback_cost1=(this.props.data.timeConsumeAverage.dataArr[i].data[0]*100/sum1).toFixed(2)
+                if(this.props.data.timeConsumeAverage.title.length>1) {
+                    wback_cost2_value=this.props.data.timeConsumeAverage.dataArr[i].data[1]
+                    wback_cost2 = (this.props.data.timeConsumeAverage.dataArr[i].data[1] *100/ sum2).toFixed(2)
+                }
+            }
+            if(this.props.data.timeConsumeAverage.dataArr[i].name=='load_feed_cost'){
+                load_feed_cost1_value=this.props.data.timeConsumeAverage.dataArr[i].data[0]
+                load_feed_cost1=(this.props.data.timeConsumeAverage.dataArr[i].data[0]*100/sum1).toFixed(2)
+                if(this.props.data.timeConsumeAverage.title.length>1) {
+                    load_feed_cost2_value=this.props.data.timeConsumeAverage.dataArr[i].data[1]
+                    load_feed_cost2 = (this.props.data.timeConsumeAverage.dataArr[i].data[1] *100/ sum2).toFixed(2)
+                }
+            }
+            if(this.props.data.timeConsumeAverage.dataArr[i].name=='show_ad_cost'){
+                show_ad_cost1_value=this.props.data.timeConsumeAverage.dataArr[i].data[0]
+                show_ad_cost1=(this.props.data.timeConsumeAverage.dataArr[i].data[0]*100/sum1).toFixed(2)
+                console.log(this.props.data.timeConsumeAverage.dataArr[i].data[0])
+                if(this.props.data.timeConsumeAverage.title.length>1) {
+                    show_ad_cost2_value=this.props.data.timeConsumeAverage.dataArr[i].data[1]
+                    show_ad_cost2 = (this.props.data.timeConsumeAverage.dataArr[i].data[1]*100 / sum2).toFixed(2)
+                }
+            }
+            if(this.props.data.timeConsumeAverage.dataArr[i].name=='permission_cost'){
+                permission_cost1_value=this.props.data.timeConsumeAverage.dataArr[i].data[0]
+                permission_cost1=(this.props.data.timeConsumeAverage.dataArr[i].data[0]*100/sum1).toFixed(2)
+                if(this.props.data.timeConsumeAverage.title.length>1) {
+                    permission_cost2_value=this.props.data.timeConsumeAverage.dataArr[i].data[1]
+                    permission_cost2 = (this.props.data.timeConsumeAverage.dataArr[i].data[1]*100 / sum2).toFixed(2)
+                }
+            }
+        }
+
+
+        console.log(app_init_cost1)
+        console.log(splash_cost1)
+        console.log(wback_cost1)
+        console.log(show_ad_cost1)
+        console.log(load_feed_cost1)
+        console.log(permission_cost1)
+        let hh;
+        if(this.props.data.timeConsumeAverage.title.length<2) {
+            hh = (
+                <div style={{
+                    margin: '6% 0',
+                    flex: '1',
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'Center',
+                }}>
+                    <div style={{flex: '0 0 80px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[0]}
+                    </div>
+                    <div style={{flex: '1'}}>
+                        <Tooltip title={app_init_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                             <div style={{
+                                 width: app_init_cost1*0.9 + '%',
+                                 height: '30px',
+                                 lineHeight:'30px',
+                                 background: 'rgb(108,121,137)',
+                                 float: 'left',
+                                 margin: '0px',
+                                 color:'white',
+                                 textAlign:'center',
+                             }}>{app_init_cost1_value+'s'}
+                            </div>
+
+                        </Tooltip>
+                        <Tooltip title={splash_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                            <div style={{
+                                width: splash_cost1 *0.9+ '%',
+                                height: '30px',
+                                lineHeight:'30px',
+                                background: 'rgb(152,197,204)',
+                                float: 'left',
+                                margin: '0px',
+                                color:'white',
+                                textAlign:'center',
+                            }}>{splash_cost1_value+'s'}
+                            </div>
+                        </Tooltip>
+                        <Tooltip title={wback_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                            <div style={{
+                                width: wback_cost1*0.9 + '%',
+                                height: '30px',
+                                lineHeight:'30px',
+                                background: 'rgb(235,197,84)',
+                                float: 'left',
+                                margin: '0px',
+                                color:'white',
+                                textAlign:'center',
+                            }}>{wback_cost1_value+'s'}</div>
+                        </Tooltip>
+                        <Tooltip title={show_ad_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                            <div style={{
+                                width: show_ad_cost1*0.9 + '%',
+                                height: '30px',
+                                lineHeight:'30px',
+                                background: 'rgb(220,114,98)',
+                                float: 'left',
+                                margin: '0px',
+                                color:'white',
+                                textAlign:'center',
+                            }}>{show_ad_cost1_value+'s'}</div>
+                        </Tooltip>
+                        <Tooltip title={load_feed_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                            <div style={{
+                                width: load_feed_cost1*0.9 + '%',
+                                height: '30px',
+                                lineHeight:'30px',
+                                background: 'rgb(172,191,170)',
+                                float: 'left',
+                                margin: '0px',
+                                color:'white',
+                                textAlign:'center',
+                            }}>{load_feed_cost1_value+'s'}</div>
+                        </Tooltip>
+                        <Tooltip title={permission_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                            <div style={{
+                                width: permission_cost1*0.9 + '%',
+                                height: '30px',
+                                lineHeight:'30px',
+                                background: 'rgb(172,130,170)',
+                                float: 'left',
+                                margin: '0px',
+                                color:'white',
+                                textAlign:'center',
+                            }}>{permission_cost1_value+'s'}</div>
+                        </Tooltip>
+                    </div>
+                </div>
+            )
+        }
+        else{
+            console.log(sum1 + "  "+sum2)
+
+            if(sum1>sum2 && sum1!=0 && sum2!=0){
+                console.log('sum1>sum2')
+                console.log('======'+sum2*100/sum1)
+                hh = (
+                    <div style={{width:'100%',margin: '6% 0',}}>
+                        <div style={{
+                            display: 'flex',
+                            flex:'1',
+                            justifyContent: 'flex-start',
+                            alignItems: 'Center',
+                            margin:'20px',
+                        }}>
+                            <div style={{flex: '0 0 100px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[0]}
+                            </div>
+
+                                <div style={{flex: '0 0 100%'}}>
+                                <Tooltip title={app_init_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: app_init_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(108,121,137)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{app_init_cost1_value+'s'}
+                                    </div>
+
+                                </Tooltip>
+                                <Tooltip title={splash_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: splash_cost1 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(152,197,204)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{splash_cost1_value+'s'}
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title={wback_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: wback_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(235,197,84)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{wback_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={show_ad_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: show_ad_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(220,114,98)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{show_ad_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={load_feed_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: load_feed_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,191,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{load_feed_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={permission_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: permission_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,130,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{permission_cost1_value+'s'}</div>
+                                </Tooltip>
+                            </div>
+                        </div>
+                        <div style={{
+                            flex:'1',
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            alignItems: 'Center',
+                            margin:'20px',
+                        }}>
+                            <div style={{flex: '0 0 100px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[1]}
+                            </div>
+                            <div style={{flex: '0 0 '+ sum2*100/sum1+'%'}}>
+
+                                <Tooltip title={app_init_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: app_init_cost2 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(108,121,137)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{app_init_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={splash_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: splash_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(152,197,204)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{splash_cost2_value+'s'} </div>
+                                </Tooltip>
+                                <Tooltip title={wback_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: wback_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(235,197,84)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{wback_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={show_ad_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: show_ad_cost2 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(220,114,98)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{show_ad_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={load_feed_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: load_feed_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,191,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{load_feed_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={permission_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: permission_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,130,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{permission_cost2_value+'s'}</div>
+                                </Tooltip>
+
+                            </div>
+                        </div>
+                    </div>
+
+                )
+            }else if(sum1<sum2&& sum1!=0 && sum2!=0){
+                console.log('======'+sum1*100/sum2)
+                hh = (
+                    <div style={{width:'100%',margin: '6% 0',}}>
+                        <div style={{
+                            display: 'flex',
+                            flex:'1',
+                            justifyContent: 'flex-start',
+                            alignItems: 'Center',
+                            margin:'20px',
+                        }}>
+                            <div style={{flex: '0 0 100px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[0]}
+                            </div>
+
+                                <div style={{flex: '0 0 '+ sum1*100/sum2+'%'}}>
+                                <Tooltip title={app_init_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: app_init_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(108,121,137)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{app_init_cost1_value+'s'}
+                                    </div>
+
+                                </Tooltip>
+                                <Tooltip title={splash_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: splash_cost1 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(152,197,204)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{splash_cost1_value+'s'}
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title={wback_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: wback_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(235,197,84)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{wback_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={show_ad_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: show_ad_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(220,114,98)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{show_ad_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={load_feed_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: load_feed_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,191,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{load_feed_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={permission_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: permission_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,130,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{permission_cost1_value+'s'}</div>
+                                </Tooltip>
+                            </div>
+                        </div>
+                        <div style={{
+                            flex:'1',
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            alignItems: 'Center',
+                            margin:'20px',
+                        }}>
+                            <div style={{flex: '0 0 100px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[1]}
+                            </div>
+                            <div style={{flex: '0 0 100%'}}>
+                                <Tooltip title={app_init_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: app_init_cost2 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(108,121,137)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{app_init_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={splash_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: splash_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(152,197,204)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{splash_cost2_value+'s'} </div>
+                                </Tooltip>
+                                <Tooltip title={wback_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: wback_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(235,197,84)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{wback_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={show_ad_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: show_ad_cost2 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(220,114,98)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{show_ad_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={load_feed_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: load_feed_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,191,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{load_feed_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={permission_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: permission_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,130,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{permission_cost2_value+'s'}</div>
+                                </Tooltip>
+                            </div>
+                        </div>
+                    </div>
+
+                )
+            }else if(sum1!=0 && sum2==0){
+                hh = (
+                    <div style={{width:'100%',margin: '6% 0',}}>
+                        <div style={{
+                            display: 'flex',
+                            flex:'1',
+                            justifyContent: 'flex-start',
+                            alignItems: 'Center',
+                            margin:'20px',
+                        }}>
+                            <div style={{flex: '0 0 100px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[0]}
+                            </div>
+                            <div style={{flex: '1'}}>
+
+                                <Tooltip title={app_init_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: app_init_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(108,121,137)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{app_init_cost1_value+'s'}
+                                    </div>
+
+                                </Tooltip>
+                                <Tooltip title={splash_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: splash_cost1 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(152,197,204)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{splash_cost1_value+'s'}
+                                    </div>
+                                </Tooltip>
+                                <Tooltip title={wback_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: wback_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(235,197,84)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{wback_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={show_ad_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: show_ad_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(220,114,98)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{show_ad_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={load_feed_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: load_feed_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,191,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{load_feed_cost1_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={permission_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: permission_cost1*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,130,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{permission_cost1_value+'s'}</div>
+                                </Tooltip>
+                            </div>
+                        </div>
+                        <div style={{
+                            flex:'1',
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            alignItems: 'Center',
+                            margin:'20px',
+                        }}>
+                            <div style={{flex: '0 0 100px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[1]}
+                            </div>
+                            <div style={{flex: '0 0 '+ sum1*100/sum2+'%'}}>
+
+                            </div>
+                        </div>
+                    </div>
+
+                )
+            }else if(sum1==0 && sum2!=0){
+                hh = (
+                    <div style={{width:'100%',margin: '6% 0',}}>
+                        <div style={{
+                            display: 'flex',
+                            flex:'1',
+                            justifyContent: 'flex-start',
+                            alignItems: 'Center',
+                            margin:'20px',
+                        }}>
+                            <div style={{flex: '0 0 100px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[0]}
+                            </div>
+                            <div style={{flex: '1'}}>
+
+
+                            </div>
+                        </div>
+                        <div style={{
+                            flex:'1',
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            alignItems: 'Center',
+                            margin:'20px',
+                        }}>
+                            <div style={{flex: '0 0 100px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[1]}
+                            </div>
+                            <div style={{flex: '0 0 '+ sum1*100/sum2+'%'}}>
+                                <Tooltip title={app_init_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: app_init_cost2 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(108,121,137)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{app_init_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={splash_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: splash_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(152,197,204)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{splash_cost2_value+'s'} </div>
+                                </Tooltip>
+                                <Tooltip title={wback_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: wback_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(235,197,84)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{wback_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={show_ad_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: show_ad_cost2 *0.9+ '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(220,114,98)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{show_ad_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={load_feed_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: load_feed_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,191,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{load_feed_cost2_value+'s'}</div>
+                                </Tooltip>
+                                <Tooltip title={permission_cost2_value+'s'} placement="topLeft" arrowPointAtCenter>
+                                    <div style={{
+                                        width: permission_cost2*0.9 + '%',
+                                        height: '30px',
+                                        lineHeight:'30px',
+                                        background: 'rgb(172,130,170)',
+                                        float: 'left',
+                                        margin: '0px',
+                                        color:'white',
+                                        textAlign:'center',
+                                    }}>{permission_cost2_value+'s'}</div>
+                                </Tooltip>
+                            </div>
+                        </div>
+                    </div>
+
+                )
+            }
+        }
+        let tuli
+        if(this.state.para.phone_plateform=='android') {
+            tuli = (
+                <Row>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(108,121,137)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>初始化应用</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(152,197,204)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>Splash展示</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(235,197,84)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>欢迎回来页</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(220,114,98)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>广告展示</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(172,191,170)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>加载feed</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <span style={{
+                                height: '20px',
+                                background: 'rgb(172,130,170)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></span>
+                            <span style={styles.p2}>用户授权</span>
+                        </div>
+                    </Col>
+                </Row>
+            )
+        }
+        else{
+            tuli = (
+                <Row>
+                    <Col xs={0} md={2} lg={2}>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(108,121,137)',
+                                flex: '0 0 20%',
+                                borderRadius:  '5px'
+                            }}></div>
+                            <div style={styles.p2}>初始化应用</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(152,197,204)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>Splash展示</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(235,197,84)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>欢迎回来页</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(220,114,98)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>广告展示</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={4} lg={4}>
+                        <div style={{flex: '1', display: 'flex', justifyContent: 'flex-start', alignItems: 'center',}}>
+                            <div style={{
+                                height: '20px',
+                                background: 'rgb(172,191,170)',
+                                flex: '0 0 20%',
+                                borderRadius: '5px'
+                            }}></div>
+                            <div style={styles.p2}>加载feed</div>
+                        </div>
+                    </Col>
+                    <Col xs={8} md={2} lg={2}>
+                    </Col>
+                </Row>
+            )
+        }
         return (
 
             <div style={styles.root}>
@@ -172,7 +1087,7 @@ export default class Pandect extends Component {
                         <div style={styles.span}>{stotal}</div>
                     </div>
                     <div style={styles.card3} >
-                        <div style={styles.span}>启动净耗时:</div>
+                        <div style={styles.span}>启动净耗时</div>
                         <div style={styles.span}>{snet}</div>
                     </div>
 
@@ -182,16 +1097,22 @@ export default class Pandect extends Component {
 
 
                 <div style={styles.chart}>
-                    <div>各环节耗时均值</div>
-                    <div style={{width:'80%',height:'60%',background:'#ff0',margin:'0 auto',verticalAlign:'middle'}}>
+                    <div style={{fontSize:'18px',fontWeight:'1',margin:'5px',padding:'10px',}}>
+                        <div style={{float:'left'}}><span>各环节耗时均值</span></div>
+
+                    </div>
+                    <div style={{width:'90%',height:'60%',margin:'30 auto',display: 'flex', justifyContent:'flex-start', alignItems:'Center', }}>
                         {hh}
+                    </div>
+                    <div style={{width:'60%',display: 'flex', justifyContent:'flex-start', alignItems:'center',margin:'0 auto'}}>
+                        {tuli}
                     </div>
 
                 </div>
 
                 <div style={{clear:'both'}}></div>
                 <TimeTrend/>
-               <TimeDis/>
+                <TimeDis/>
 
 
             </div>

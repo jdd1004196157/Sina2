@@ -16,66 +16,20 @@ var AppStore2 =Object.assign({}, EventEmitter.prototype, {
                 dataArr: [
                     {
                         name: 'stotal',
-                        data:[2.3, 3.4, ],
+                        data:[0, 0],
                     },
                     {
                         name: 'snet',
-                        data:[2, 3.9,],
+                        data:[0, 0],
                     },
                 ]
             },
             //各个环节耗时均值
             timeConsumeAverage: {
-                title: '各个环节耗时均值',
-                type: [],
-                tooltip:'axis',
-                yAxisData:{
-                    name: '时间（s）',
-                    type: 'value',
-                    data:'',
-                    min:0,
-                    max:3,
-                },
-                nameLocation: 'end',
-                nameGap: 22,
-                xAxisData: [
-                    {
-                        name: '日期',
-                        type: 'category',
-                        data:[]
-                    }
-                ],
-                boundaryGap: true,
-                dataZoom: false,
-                color: ['#c23531','#d48265', '#91c7ae','#749f83' ,'#2f4554', '#61a0a8',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
-                animation: false,
+                title:['7.1.1','7.1.2',] ,
+                dataArr: [
 
-                data:[
-                    {
-                        type:'bar',
-                        name: 'MAPI',
-                        data:[],
-                        barMaxWidth: 20,
-                        stack:1,
-                    },
-                    {
-                        type:'bar',
-                        name: '平台',
-                        data:[],
-                        barMaxWidth: 20,
-                        stack:1,
-                    },
-                    {
-                        type:'bar',
-                        name: '客户端',
-                        data:[],
-                        barMaxWidth: 20,
-                        stack:1,
-                    }
-
-                ],
-
-
+                ]
             },
 
             //耗时趋势

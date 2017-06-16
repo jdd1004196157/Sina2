@@ -109,17 +109,40 @@ function generateChartData(data,type,stack,percent){
             item1 = {
                 type: type,
                 name: 'MAPI',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+                        formatter: '{c}%'
+                    }
+                },
                 data: [],
                 barMaxWidth: 20,
                 stack: 1,
             }
         }
         else {
-            item1 = {
-                type: type,
-                name: 'MAPI',
-                data: [],
-                barMaxWidth: 20,
+            if(type=='bar'){
+                item1 = {
+                    type: type,
+                    name: 'MAPI',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'right',
+                            formatter: '{c}%'
+                        }
+                    },
+                    data: [],
+                    barMaxWidth: 20,
+                }
+            }else{
+                item1 = {
+                    type: type,
+                    name: 'MAPI',
+                    data: [],
+                    barMaxWidth: 20,
+                }
             }
         }
         item1.name = data[k].name
@@ -132,7 +155,7 @@ function generateChartData(data,type,stack,percent){
             }
             for(let j=0;j<data[k].data.length;j++) {
                 if(data[k].data[j]!='null'){
-                    item1.data.push((data[k].data[j]/partsum).toFixed(2)*100)
+                    item1.data.push((data[k].data[j]*100/partsum).toFixed(2))
                     if(type=='line'){
                         if(data[k].data[j]<min){
                             min=data[k].data[j]
@@ -177,7 +200,7 @@ function generateChartData(data,type,stack,percent){
 
 //获取原数据
 export function getMetaData(para){
-    $.post("http://dekai.sla.weibo.cn/php/start.php?api=BnewStartTime.getselect",{during_time:para.during_time},
+    $.post("http://test.sla.weibo.cn/php/start.php?api=BnewStartTime.getselect",{during_time:para.during_time},
         function(data,status) {
             console.log('原数据')
             console.log(data)
@@ -188,7 +211,6 @@ export function getMetaData(para){
             AppStore2.data.sysVersion.android=transfer(data.data.system.android,1)
             AppStore2.data.wbVersion.iphone=transfer(data.data.version.iphone,0)
             AppStore2.data.wbVersion.android=transfer(data.data.version.android,0)
-            console.log(AppStore2.data)
             AppStore2.emitChange()
         }
     )
@@ -204,21 +226,39 @@ export function getPandectChart(para){
             console.log('获得的纵览数据');
             console.log(data);
             ChooseStore.data.pansect.flag=false;
-            //*************************************耗时趋势
+
+
             data=data.data
+
+            //各个环节耗时均值
+
+            AppStore2.data.pansect.timeConsumeAverage=data.ca
+
+
+
+
+           //两个总览
+
+            AppStore2.data.pansect.paneldata=data.pandect
+
+            //*************************************耗时趋势
+
             let timeConsumeTrend=data.ct
             let ret=generateChartData(timeConsumeTrend.dataArr,'line',0,0)
             TimeTrendStore.data.pansect.timeConsumeTrend.xAxisData[0].data = timeConsumeTrend.title
             TimeTrendStore.data.pansect.timeConsumeTrend.data = ret[1]
             TimeTrendStore.data.pansect.timeConsumeTrend.type = ret[0]
 
-            //*************************************耗时趋势
+            //*************************************耗时分布
+
             let timeConsumeDistribute=data.cd
-            let timeConsumeDistributeret=generateChartData(timeConsumeDistribute.dataArr,'bar',0,0)
+            let timeConsumeDistributeret=generateChartData(timeConsumeDistribute.dataArr,'bar',0,1)
             TimeDisStore.data.pansect.timeConsumeDistribute.yAxisData.data = timeConsumeDistribute.title
             TimeDisStore.data.pansect.timeConsumeDistribute.data = timeConsumeDistributeret[1]
             TimeDisStore.data.pansect.timeConsumeDistribute.type = timeConsumeDistributeret[0]
 
+
+            AppStore2.emitChange()
             TimeTrendStore.emitChange()
             TimeDisStore.emitChange()
 

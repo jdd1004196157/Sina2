@@ -41,24 +41,6 @@ var AppStore2 =Object.assign({}, EventEmitter.prototype, {
                 color: ['#c23531','#d48265', '#91c7ae','#749f83' ,'#2f4554', '#61a0a8',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
                 animation: true,
                 data: [
-                    {
-                        type: 'line',
-                        name: 'MAPI',
-                        data: [],
-                        barWidth: 20
-                    },
-                    {
-                        type: 'line',
-                        name: '平台',
-                        data: [],
-                        barWidth: 20
-                    },
-                    {
-                        type: 'line',
-                        name: '客户端',
-                        data: [],
-                        barWidth: 20
-                    }
                 ],
             },
 
