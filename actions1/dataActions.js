@@ -145,7 +145,7 @@ function generateChartData(data,type,stack,percent){
                 }
             }
         }
-        item1.name = data[k].name
+
         if (percent == 1) {
             let partsum = 0
             for (let j = 0; j < data[k].data.length; j++) {
@@ -172,7 +172,7 @@ function generateChartData(data,type,stack,percent){
         }
         else{
             for(let j=0;j<data[k].data.length;j++) {
-                if(data[k].data[j]!='null'){
+                if(data[k].data[j]!='0'){
                     item1.data.push(data[k].data[j].toFixed(2))
                     if(type=='line'){
                         if(data[k].data[j]<min){
@@ -187,8 +187,19 @@ function generateChartData(data,type,stack,percent){
                 }
             }
         }
+
+        let type1=data[k].name.toString()
+
+        if(data[k].name.toString().indexOf('-')!=-1){
+            type1 = data[k].name.replace('-','之前')
+        }
+        if(data[k].name.toString().indexOf('+')!=-1){
+            type1 = data[k].name.replace('+','之后')
+        }
+
+        item1.name = type1
         items.push(item1)
-        types.push(data[k].name)
+        types.push(type1)
     }
     ret.push(types)
     ret.push(items)
@@ -202,7 +213,7 @@ function generateChartData(data,type,stack,percent){
 export function getMetaData(para){
     $.post("http://test.sla.weibo.cn/php/start.php?api=BnewStartTime.getselect",{during_time:para.during_time},
         function(data,status) {
-            console.log('原数据')
+            console.log('获得元数据')
             console.log(data)
 
             AppStore2.data.phoneType.iphone=transfer(data.data.mobile.iphone,1)
@@ -223,37 +234,34 @@ export function getPandectChart(para){
     console.log(para);
     $.post("http://test.sla.weibo.cn/php/start.php?api=BnewStartTime.getdata",para,
         function(data,status) {
-            console.log('获得的纵览数据');
+            console.log('获得的总览数据');
             console.log(data);
             ChooseStore.data.pansect.flag=false;
-
-
             data=data.data
 
             //各个环节耗时均值
-
             AppStore2.data.pansect.timeConsumeAverage=data.ca
 
-
-
-
            //两个总览
-
             AppStore2.data.pansect.paneldata=data.pandect
 
             //*************************************耗时趋势
 
             let timeConsumeTrend=data.ct
+
             let ret=generateChartData(timeConsumeTrend.dataArr,'line',0,0)
-            TimeTrendStore.data.pansect.timeConsumeTrend.xAxisData[0].data = timeConsumeTrend.title
+
+            TimeTrendStore.data.pansect.timeConsumeTrend.xAxisData[0].data =timeConsumeTrend.title
             TimeTrendStore.data.pansect.timeConsumeTrend.data = ret[1]
             TimeTrendStore.data.pansect.timeConsumeTrend.type = ret[0]
 
             //*************************************耗时分布
 
             let timeConsumeDistribute=data.cd
+
             let timeConsumeDistributeret=generateChartData(timeConsumeDistribute.dataArr,'bar',0,1)
-            TimeDisStore.data.pansect.timeConsumeDistribute.yAxisData.data = timeConsumeDistribute.title
+
+            TimeDisStore.data.pansect.timeConsumeDistribute.yAxisData.data =timeConsumeDistribute.title
             TimeDisStore.data.pansect.timeConsumeDistribute.data = timeConsumeDistributeret[1]
             TimeDisStore.data.pansect.timeConsumeDistribute.type = timeConsumeDistributeret[0]
 
@@ -263,7 +271,6 @@ export function getPandectChart(para){
             TimeDisStore.emitChange()
 
         }
-
     );
 
 }
@@ -292,25 +299,21 @@ export function getSelectData(para){
         let requestPara=ChooseStore.data.pansect.PortData
         requestPara.range='cd'
         requestPara.ctime_type=para.selected
+        console.log(requestPara)
         $.post("http://test.sla.weibo.cn/php/start.php?api=BnewStartTime.getdata",requestPara,
             function(data,status) {
                 console.log('获得的数据')
                 console.log(data)
                 let timeConsumeDistribute =data.data
-                let timeConsumeDistributeret = generateChartData(timeConsumeDistribute.dataArr, 'bar', 0, 0)
+                let timeConsumeDistributeret = generateChartData(timeConsumeDistribute.dataArr, 'bar', 0, 1)
                 TimeDisStore.data.pansect.timeConsumeDistribute.yAxisData.data = timeConsumeDistribute.title
                 TimeDisStore.data.pansect.timeConsumeDistribute.data = timeConsumeDistributeret[1]
                 TimeDisStore.data.pansect.timeConsumeDistribute.type = timeConsumeDistributeret[0]
+                console.log(timeConsumeDistributeret[0])
                 TimeDisStore.emitChange()
             }
         )
     }
-
-
-
-
-
-
 }
 
 

@@ -72,7 +72,7 @@ export default class Charts extends Component {
             },
             legend: {
                 data: chartData.type,
-                top: 300
+                top: this.props.height-50
             },
 
             toolbox: {
@@ -124,7 +124,7 @@ export default class Charts extends Component {
                 <div style={styles.root} id={this.props.index}>
 
                 </div>
-                <div style={{float:'right',zIndex: 100,position:'relative',margin:'-340px 120px auto auto'}}>
+                <div style={{float:'right',zIndex: 100,position:'relative',margin:-(this.props.height-10)+'px 120px auto auto'}}>
                     <Select defaultValue="snet" style={{ width: 120 }} onChange={this.handleChange}>
                         <Option value="stotal">启动总耗时</Option>
                         <Option value="snet">启动净耗时</Option>
@@ -134,6 +134,8 @@ export default class Charts extends Component {
                         <Option value="swel">欢迎回来耗时</Option>
                         <Option value="slfeed">加载feed耗时</Option>
                         <Option value="sau">用户授权耗时</Option>
+                        <Option value="sadcost">广告耗时</Option>
+                        <Option value="sadload">广告加载耗时</Option>
                     </Select>
                 </div>
             </div>

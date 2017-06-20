@@ -30,6 +30,7 @@ export default class Pandect extends Component {
 
     _onChange2(){
         this.setState(TimeTrendStore)
+
     }
     render() {
 
@@ -136,7 +137,7 @@ export default class Pandect extends Component {
         }
         return (
             <div style={styles.chart}>
-                <Charts data={TimeTrendStore.data.pansect.timeConsumeTrend} index="timeConsumeTrend"/>
+                <Charts data={TimeTrendStore.data.pansect.timeConsumeTrend} index="timeConsumeTrend" height='350'/>
             </div>
         )
     }

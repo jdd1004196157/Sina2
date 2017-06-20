@@ -36,6 +36,7 @@ export default class PandectChoose extends Component {
         this.changeLd = this.changeLd.bind(this)
         this.changeTime = this.changeTime.bind(this)
         this.changefirstRun = this.changefirstRun.bind(this)
+        this.changeVerOpt = this.changeVerOpt.bind(this)
 
         this.getRecent7Days = this.getRecent7Days.bind(this)
         this.getDateStr = this.getDateStr.bind(this)
@@ -271,9 +272,7 @@ export default class PandectChoose extends Component {
     //时间
     changeTime(time, timeString) {
        // alert(timeString[0]==timeString[1])
-        if(timeString[0]==timeString[1]){
-            return
-        }
+
         DashBoardDispatcher.dispatch({
             action: 'CHANGE_PORT',
             data: {
@@ -404,157 +403,73 @@ export default class PandectChoose extends Component {
         const dateFormat = 'YYYY/MM/DD';
         const true1=true
         let all;
-       /* if(ChooseStore.data.pansect.flag){
-            all=(
-                <div style={{width:'98%',margin:'auto',}}>
-                    <Spin tip="Loading..." style={{width:'98%'}}>
-                        <div style={styles.choose}>
+        all=(
+            <div style={{width:'98%',margin:'auto',}}>
+                <div style={styles.choose}>
+                    <Row >
+                        <Col xs={8} md={5} lg={5}  style={styles.col}>
+                            <span>手机平台：</span>
+                            <Select  style={{ width: '50%'}} size="large" onChange={this.changePhonePla}  value={ChooseStore.data.pansect.PortData.phone_plateform}>
+                                <Option value="android">Android</Option>
+                                <Option value="iphone">iPhone</Option>
+                            </Select>
+                        </Col>
+                        <Col  xs={8} md={5} lg={5} style={styles.col}>
+                            <span>微博版本：</span>
+                            <Select multiple={true1}  style={{ width: '60%',}} size="large" onChange={this.changeWbVersion}  value={ChooseStore.data.pansect.PortData.wb_version}>
+                                {version_select}
+                            </Select>
+                        </Col>
 
-                            <Row >
-                                <Col xs={8} md={5} lg={5}  style={styles.col}>
-                                    <span>手机平台：</span>
-                                    <Select  style={{ width: '65%'}} size="large" onChange={this.changeBusiness}  value={ChooseStore.data.pansect.PortData.subtype}>
-                                        <Option value="android">Android</Option>
-                                        <Option value="iphone">iPhone</Option>
-                                    </Select>
-                                </Col>
-                                <Col  xs={8} md={9} lg={9} style={styles.col}>
-                                    <span>微博版本：</span>
-                                    <Select   style={{ width: '60%',}} size="large" onChange={this.changeWbVersion}  value={ChooseStore.data.pansect.PortData.app_version}>
-                                        {version_select}
-                                    </Select>
-                                </Col>
+                        <Col  xs={8} md={5} lg={5} style={styles.col}>
+                            <span>版本选项：</span>
+                            <Select disabled={this.state.veroption} style={{ width: '50%', }} size="large" onChange={this.changeVerOpt} value={ChooseStore.data.pansect.PortData.ver_option	}>
+                                <Option value="n">仅当前版本</Option>
+                                <Option value="b">当前版本之前</Option>
+                                <Option value="a">当前版本之后</Option>
+                            </Select>
+                        </Col>
+                        <Col xs={16} md={8} lg={8}  style={styles.col}>
+                            <span>采样时间：</span>
+                            <RangePicker style={{width: '70%' }}
+                                         disabledDate={this.disabledDate()} format={dateFormat}
+                                         size="large"  onChange={this.changeTime}
+                                         value={[moment(times[0], dateFormat), moment(times[1], dateFormat)]}/>
+                        </Col>
 
-                                <Col  xs={8} md={5} lg={5} style={styles.col}>
-                                    <span>版本选项：</span>
-                                    <Select style={{ width: '60%', }} size="large" onChange={this.changeNetType} value={ChooseStore.data.pansect.PortData.network_type}>
-                                        <Option value="n">仅当前版本</Option>
-                                        <Option value="b">当前版本之前</Option>
-                                        <Option value="a">当前版本之后</Option>
-                                    </Select>
-                                </Col>
-                                <Col xs={7} md={5} lg={5}  style={styles.col}>
-                                    <span>时间粒度：</span>
-                                    <Select  style={{ width: '50%' }} size="large" onChange={this.changeLd} value={ChooseStore.data.pansect.PortData.granularity}>
-                                        <Option value="d">天</Option>
-                                        <Option value="w">周</Option>
-                                        <Option value="m">月</Option>
-                                    </Select>
-                                </Col>
-
-
-                            </Row>
-                            <Row>
-                                <Col xs={7} md={8} lg={5} style={styles.col}>
-                                    <span>手机机型：</span>
-                                    <Select style={{ width: '60%' }} size="large" onChange={this.changeSystem} value={ChooseStore.data.pansect.PortData.phonetype}>
-                                        {phoneType}
-                                    </Select>
-                                </Col>
-                                <Col xs={7} md={8} lg={5} style={styles.col}>
-                                    <span>系统版本：</span>
-                                    <Select style={{ width: '60%' }} size="large" onChange={this.changeSystem} value={ChooseStore.data.pansect.PortData.phonetype}>
-                                        {sysVersion}
-                                    </Select>
-                                </Col>
-                                <Col xs={7} md={8} lg={5} style={styles.col}>
-                                    <span>首次启动：</span>
-                                    <Select style={{ width: '60%' }} size="large" onChange={this.changeSystem} value={ChooseStore.data.pansect.PortData.phonetype}>
-                                        <Option value="y">是</Option>
-                                        <Option value="n">否</Option>
-                                    </Select>
-                                </Col>
-                                <Col xs={10} md={9} lg={9}  style={styles.col}>
-                                    <span>采样时间：</span>
-                                    <RangePicker style={{width: '80%' }} defaultValue={[moment(this.getRecent7Days()[1], dateFormat), moment(this.getRecent7Days()[0], dateFormat)]}
-                                                 disabledDate={this.disabledDate()} format={dateFormat}
-                                                 size="large"  onChange={this.changeTime}
-                                                 value={[moment(ChooseStore.data.pansect.PortData.startdate, dateFormat), moment(ChooseStore.data.pansect.PortData.enddate, dateFormat)]}/>
-                                </Col>
-
-                            </Row>
-
-                        </div>
-                    </Spin>
+                    </Row>
+                    <Row>
+                        <Col xs={12} md={5} lg={5} style={styles.col}>
+                            <span>手机机型：</span>
+                            <Select style={{ width: '50%' }} size="large" onChange={this.phoneType} value={ChooseStore.data.pansect.PortData.phone_type}>
+                                {phoneType}
+                            </Select>
+                        </Col>
+                        <Col xs={12} md={5} lg={5} style={styles.col}>
+                            <span>系统版本：</span>
+                            <Select style={{ width: '60%' }} size="large" onChange={this.changeSystem} value={ChooseStore.data.pansect.PortData.sys_version}>
+                                {sysVersion}
+                            </Select>
+                        </Col>
+                        <Col xs={12} md={5} lg={5} style={styles.col}>
+                            <span>首次启动：</span>
+                            <Select disabled={this.state.first}  style={{ width: '50%' }} size="large" onChange={this.changefirstRun} value={ChooseStore.data.pansect.PortData.first_run}>
+                                <Option value="y">是</Option>
+                                <Option value="n">否</Option>
+                            </Select>
+                        </Col>
+                        <Col xs={8} md={5} lg={5}  style={styles.col}>
+                            <span>时间粒度：</span>
+                            <Select  style={{ width: '50%' }} size="large" onChange={this.changeLd} value={ChooseStore.data.pansect.PortData.granularity}>
+                                <Option value="d">天</Option>
+                                <Option value="w">周</Option>
+                                <Option value="m">月</Option>
+                            </Select>
+                        </Col>
+                    </Row>
                 </div>
-
-            )
-        }else{*/
-            all=(
-                <div style={{width:'98%',margin:'auto',}}>
-                    <div style={styles.choose}>
-                        <Row >
-                            <Col xs={8} md={5} lg={5}  style={styles.col}>
-                                <span>手机平台：</span>
-                                <Select  style={{ width: '50%'}} size="large" onChange={this.changePhonePla}  value={ChooseStore.data.pansect.PortData.phone_plateform}>
-                                    <Option value="android">Android</Option>
-                                    <Option value="iphone">iPhone</Option>
-                                </Select>
-                            </Col>
-                            <Col  xs={16} md={8} lg={8} style={styles.col}>
-                                <span>微博版本：</span>
-                                <Select multiple={true1}  style={{ width: '70%',}} size="large" onChange={this.changeWbVersion}  value={ChooseStore.data.pansect.PortData.wb_version}>
-                                    {version_select}
-                                </Select>
-                            </Col>
-
-                            <Col  xs={12} md={5} lg={5} style={styles.col}>
-                                <span>版本选项：</span>
-                                <Select disabled={this.state.veroption} style={{ width: '50%', }} size="large" onChange={this.changeVerOpt} value={ChooseStore.data.pansect.PortData.ver_option	}>
-                                    <Option value="n">仅当前版本</Option>
-                                    <Option value="b">当前版本之前</Option>
-                                    <Option value="a">当前版本之后</Option>
-                                </Select>
-                            </Col>
-                            <Col xs={12} md={5} lg={5} style={styles.col}>
-                                <span>首次启动：</span>
-                                <Select disabled={this.state.first}  style={{ width: '50%' }} size="large" onChange={this.changefirstRun} value={ChooseStore.data.pansect.PortData.first_run}>
-                                    <Option value="y">是</Option>
-                                    <Option value="n">否</Option>
-                                </Select>
-                            </Col>
-
-                        </Row>
-                        <Row>
-                            <Col xs={12} md={5} lg={5} style={styles.col}>
-                                <span>手机机型：</span>
-                                <Select style={{ width: '50%' }} size="large" onChange={this.phoneType} value={ChooseStore.data.pansect.PortData.phone_type}>
-                                    {phoneType}
-                                </Select>
-                            </Col>
-                            <Col xs={12} md={5} lg={5} style={styles.col}>
-                                <span>系统版本：</span>
-                                <Select style={{ width: '53%' }} size="large" onChange={this.changeSystem} value={ChooseStore.data.pansect.PortData.sys_version}>
-                                    {sysVersion}
-                                </Select>
-                            </Col>
-                            <Col xs={8} md={5} lg={5}  style={styles.col}>
-                                <span>时间粒度：</span>
-                                <Select  style={{ width: '50%' }} size="large" onChange={this.changeLd} value={ChooseStore.data.pansect.PortData.granularity}>
-                                    <Option value="d">天</Option>
-                                    <Option value="w">周</Option>
-                                    <Option value="m">月</Option>
-                                </Select>
-                            </Col>
-                            <Col xs={16} md={8} lg={8}  style={styles.col}>
-                                <span>采样时间：</span>
-                                <RangePicker style={{width: '70%' }}
-                                             disabledDate={this.disabledDate()} format={dateFormat}
-                                             size="large"  onChange={this.changeTime}
-                                             value={[moment(times[0], dateFormat), moment(times[1], dateFormat)]}/>
-                            </Col>
-
-
-
-
-                        </Row>
-
-
-                    </div>
-                </div>
-            )
-        //}
-
+            </div>
+        )
         return (
 
             <div style={styles.root}>

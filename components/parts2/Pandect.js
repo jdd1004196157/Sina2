@@ -141,30 +141,94 @@ export default class Pandect extends Component {
             },
 
         }
-        let stotal=''
-        let snet=''
+        let stotal;
+        let snet;
+        let tip;
+        switch (this.state.para.ver_option){
+            case 'n': tip='仅当前版本'; break;
+            case 'b': tip='当前版本之前'; break;
+            case 'a': tip='当前版本之后'; break;
+            default:tip=''; break;
+        }
+
         if(this.props.data.paneldata.dataArr.length==0){
             if(this.props.data.paneldata.title.length>1){
-                stotal=0+'s ('+this.props.data.paneldata.title[0]+')  VS  0'+'s ('+this.props.data.paneldata.title[1]+')'
-                snet=0+'s ('+this.props.data.paneldata.title[0]+')  VS  0'+'s ('+this.props.data.paneldata.title[1]+')'
+                stotal=(
+                    <div >
+                        <span style={{fontSize:'30px',fontStyle:'italic'}}>0s </span>
+                        <span style={{fontStyle:'italic'}}>({this.props.data.paneldata.title[0]})    </span>
+                        <span style={{fontSize:'25px'}}>   VS  </span>
+                        <span style={{fontSize:'30px',fontStyle:'italic'}}>0s </span>
+                        <span style={{fontStyle:'italic'}}>({this.props.data.paneldata.title[1]})</span>
+                    </div>
+                )
+                snet=(
+                    <div >
+                        <span style={{fontSize:'30px',fontStyle:'italic'}}>0s </span>
+                        <span style={{fontStyle:'italic'}}>({this.props.data.paneldata.title[0]})    </span>
+                        <span style={{fontSize:'25px'}}>   VS  </span>
+                        <span style={{fontSize:'30px',fontStyle:'italic'}}>0s </span>
+                        <span style={{fontStyle:'italic'}}>({this.props.data.paneldata.title[1]})</span>
+                    </div>
+                )
             }else{
-                stotal=0+'s(All)'
-                snet=0+'s(All)'
+                stotal=(
+                    <div>
+                        <span style={{fontSize:'30px',color:'rgb(230,197,103)'}}>0s </span>
+                        <span>({tip})</span>
+
+                    </div>
+                )
+                snet=(
+                    <div>
+                        <span style={{fontSize:'30px',color:'rgb(230,197,103)'}}>0s </span>
+                        <span>({tip})</span>
+
+                    </div>
+                )
             }
         }else{
             for(let i=0;i<this.props.data.paneldata.dataArr.length;i++){
                 if(this.props.data.paneldata.dataArr[i].name=='stotal'){
                     if(this.props.data.paneldata.title.length>1){
-                        stotal=this.props.data.paneldata.dataArr[i].data[0]+'s ('+this.props.data.paneldata.title[0]+')  VS  '+this.props.data.paneldata.dataArr[i].data[1]+'s ('+this.props.data.paneldata.title[1]+')'
+                        stotal=(
+                            <div>
+                                <span style={{fontSize:'30px',fontStyle:'italic',color:'rgb(230,197,103)'}}>{this.props.data.paneldata.dataArr[i].data[0]}s </span>
+                                <span style={{fontStyle:'italic'}}>({this.props.data.paneldata.title[0]})    </span>
+                                <span style={{fontSize:'25px',color:'rgb(161,197,203)'}}>   VS  </span>
+                                <span style={{fontSize:'30px',fontStyle:'italic',color:'rgb(230,197,103)'}}>{this.props.data.paneldata.dataArr[i].data[1]}s </span>
+                                <span style={{fontStyle:'italic'}}>({this.props.data.paneldata.title[1]})</span>
+                            </div>
+                        )
                     }else{
-                        stotal=this.props.data.paneldata.dataArr[i].data[0]+'s(All)'
+                        stotal=(
+                            <div>
+                                <span style={{fontSize:'30px',color:'rgb(230,197,103)'}}>{this.props.data.paneldata.dataArr[i].data[0]}s </span>
+                                <span>({tip})</span>
+
+                            </div>
+                        )
+
                     }
                 }
                 if(this.props.data.paneldata.dataArr[i].name=='snet'){
                     if(this.props.data.paneldata.title.length>1){
-                        snet=this.props.data.paneldata.dataArr[i].data[0]+'s ('+this.props.data.paneldata.title[0]+')  VS  '+this.props.data.paneldata.dataArr[i].data[1]+'s ('+this.props.data.paneldata.title[1]+')'
+                        snet=(
+                            <div>
+                                <span style={{fontSize:'30px',fontStyle:'italic',color:'rgb(230,197,103)'}}>{this.props.data.paneldata.dataArr[i].data[0]}s </span>
+                                <span style={{fontStyle:'italic'}}>({this.props.data.paneldata.title[0]})    </span>
+                                <span style={{fontSize:'25px',color:'rgb(161,197,203)'}}>   VS  </span>
+                                <span style={{fontSize:'30px',fontStyle:'italic',color:'rgb(230,197,103)'}}>{this.props.data.paneldata.dataArr[i].data[1]}s </span>
+                                <span style={{fontStyle:'italic'}}>({this.props.data.paneldata.title[1]})</span>
+                            </div>
+                        )
                     }else{
-                        snet=this.props.data.paneldata.dataArr[i].data[0]+'s(All)'
+                        snet=(
+                            <div>
+                                <span style={{fontSize:'30px',color:'rgb(230,197,103)'}}>{this.props.data.paneldata.dataArr[i].data[0]}s </span>
+                                <span>({tip})</span>
+                            </div>
+                        )
                     }
                 }
             }
@@ -244,7 +308,6 @@ export default class Pandect extends Component {
             if(this.props.data.timeConsumeAverage.dataArr[i].name=='show_ad_cost'){
                 show_ad_cost1_value=this.props.data.timeConsumeAverage.dataArr[i].data[0]
                 show_ad_cost1=(this.props.data.timeConsumeAverage.dataArr[i].data[0]*100/sum1).toFixed(2)
-                console.log(this.props.data.timeConsumeAverage.dataArr[i].data[0])
                 if(this.props.data.timeConsumeAverage.title.length>1) {
                     show_ad_cost2_value=this.props.data.timeConsumeAverage.dataArr[i].data[1]
                     show_ad_cost2 = (this.props.data.timeConsumeAverage.dataArr[i].data[1]*100 / sum2).toFixed(2)
@@ -260,15 +323,16 @@ export default class Pandect extends Component {
             }
         }
 
-
-        console.log(app_init_cost1)
-        console.log(splash_cost1)
-        console.log(wback_cost1)
-        console.log(show_ad_cost1)
-        console.log(load_feed_cost1)
-        console.log(permission_cost1)
         let hh;
+
         if(this.props.data.timeConsumeAverage.title.length<2) {
+            let title=this.props.data.timeConsumeAverage.title[0]
+            if(title.indexOf('-')!=-1){
+                title=this.props.data.timeConsumeAverage.title[0].replace('-','之前')
+            }
+            if(title.indexOf('+')!=-1){
+                title=this.props.data.timeConsumeAverage.title[0].replace('+','之后')
+            }
             hh = (
                 <div style={{
                     margin: '6% 0',
@@ -277,7 +341,7 @@ export default class Pandect extends Component {
                     justifyContent: 'flex-start',
                     alignItems: 'Center',
                 }}>
-                    <div style={{flex: '0 0 80px', margin: '10px',height:'30px'}}>版本：{this.props.data.timeConsumeAverage.title[0]}
+                    <div style={{flex: '0 0 120px',height:'30px'}}>版本：{title}
                     </div>
                     <div style={{flex: '1'}}>
                         <Tooltip title={app_init_cost1_value+'s'} placement="topLeft" arrowPointAtCenter>
@@ -360,11 +424,7 @@ export default class Pandect extends Component {
             )
         }
         else{
-            console.log(sum1 + "  "+sum2)
-
             if(sum1>sum2 && sum1!=0 && sum2!=0){
-                console.log('sum1>sum2')
-                console.log('======'+sum2*100/sum1)
                 hh = (
                     <div style={{width:'100%',margin: '6% 0',}}>
                         <div style={{
@@ -545,7 +605,6 @@ export default class Pandect extends Component {
 
                 )
             }else if(sum1<sum2&& sum1!=0 && sum2!=0){
-                console.log('======'+sum1*100/sum2)
                 hh = (
                     <div style={{width:'100%',margin: '6% 0',}}>
                         <div style={{
@@ -981,7 +1040,7 @@ export default class Pandect extends Component {
                                 flex: '0 0 20%',
                                 borderRadius: '5px'
                             }}></div>
-                            <div style={styles.p2}>广告展示</div>
+                            <div style={styles.p2}>广告耗时</div>
                         </div>
                     </Col>
                     <Col xs={8} md={4} lg={4}>
@@ -1055,7 +1114,7 @@ export default class Pandect extends Component {
                                 flex: '0 0 20%',
                                 borderRadius: '5px'
                             }}></div>
-                            <div style={styles.p2}>广告展示</div>
+                            <div style={styles.p2}>广告耗时</div>
                         </div>
                     </Col>
                     <Col xs={8} md={4} lg={4}>
@@ -1084,11 +1143,11 @@ export default class Pandect extends Component {
                 <div style={styles.show}>
                     <div style={styles.card2} >
                         <div style={styles.span}>启动总耗时</div>
-                        <div style={styles.span}>{stotal}</div>
+                        {stotal}
                     </div>
                     <div style={styles.card3} >
                         <div style={styles.span}>启动净耗时</div>
-                        <div style={styles.span}>{snet}</div>
+                        {snet}
                     </div>
 
                 </div>

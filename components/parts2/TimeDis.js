@@ -50,7 +50,7 @@ export default class TimeDis extends Component {
             },
             chart:{
                 width:'98%',
-                height: '350px',
+                height: '500px',
                 background:'white',
                 margin:'10 auto',
                 borderRadius: 5,
@@ -138,7 +138,7 @@ export default class TimeDis extends Component {
         return (
 
                 <div style={styles.chart}>
-                    <Charts data={TimeDisStore.data.pansect.timeConsumeDistribute} index="timeConsumeDistribute"/>
+                    <Charts data={TimeDisStore.data.pansect.timeConsumeDistribute} index="timeConsumeDistribute" height='500'/>
                 </div>
 
         )
