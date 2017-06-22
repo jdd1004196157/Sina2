@@ -27,7 +27,6 @@ export default class TimeDis extends Component {
         TimeDisStore.addChangeListener(this._onChange1.bind(this))
     }
     _onChange1(){
-        console.log('listen TimeDisStore')
         this.setState(TimeDisStore)
     }
 
@@ -138,7 +137,7 @@ export default class TimeDis extends Component {
         return (
 
                 <div style={styles.chart}>
-                    <Charts data={TimeDisStore.data.pansect.timeConsumeDistribute} index="timeConsumeDistribute" height='500'/>
+                    <Charts data={TimeDisStore.data.pansect.timeConsumeDistribute} index="timeConsumeDistribute" height='500' />
                 </div>
 
         )

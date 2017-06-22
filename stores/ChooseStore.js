@@ -27,7 +27,7 @@ var ChooseStore =Object.assign({}, EventEmitter.prototype, {
 
         },
 
-
+        value:'snet',
     },
 
 

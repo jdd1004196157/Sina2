@@ -66,6 +66,7 @@ export function changePort(data) {
         }
 
     }
+    ChooseStore.data.value='snet'
     ChooseStore.emitChange("changeport")
 }
 
@@ -269,17 +270,42 @@ export function getPandectChart(para){
             AppStore2.emitChange()
             TimeTrendStore.emitChange()
             TimeDisStore.emitChange()
+            ChooseStore.emitChange()
 
         }
     );
 
 }
-
+function clone(obj) {
+    var o;
+    if (typeof obj == "object") {
+        if (obj === null) {
+            o = null;
+        } else {
+            if (obj instanceof Array) {
+                o = [];
+                for (var i = 0, len = obj.length; i < len; i++) {
+                    o.push(clone(obj[i]));
+                }
+            } else {
+                o = {};
+                for (var j in obj) {
+                    o[j] = clone(obj[j]);
+                }
+            }
+        }
+    } else {
+        o = obj;
+    }
+    return o;
+}
 export function getSelectData(para){
 
+    ChooseStore.data.value=para.selected
+    ChooseStore.emitChange()
     console.log('请求的参数part')
     if(para.which=='timeConsumeTrend') {  //如果修改的是耗时趋势
-        let requestPara=ChooseStore.data.pansect.PortData
+        let requestPara=clone(ChooseStore.data.pansect.PortData)
         requestPara.range='ct'
         requestPara.ctime_type=para.selected
         console.log(requestPara)
@@ -296,7 +322,7 @@ export function getSelectData(para){
             }
         )
     }else if(para.which=='timeConsumeDistribute') {
-        let requestPara=ChooseStore.data.pansect.PortData
+        let requestPara=clone(ChooseStore.data.pansect.PortData)
         requestPara.range='cd'
         requestPara.ctime_type=para.selected
         console.log(requestPara)

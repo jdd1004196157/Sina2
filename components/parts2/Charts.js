@@ -7,6 +7,7 @@ import $ from 'jquery'
 import '../../node_modules/echarts/map/js/china';
 import { Select } from 'antd';
 import DashBoardDispatcher from '../../dispatcher/DashBoardDispatcher'
+import ChooseStore from '../../stores/ChooseStore'
 const Option = Select.Option;
 export default class Charts extends Component {
 
@@ -19,6 +20,8 @@ export default class Charts extends Component {
         this.handleChange = this.handleChange.bind(this)
     }
 
+    componentWillMount(){
+    }
     componentDidMount() {
         this.initLine()
     }
@@ -36,7 +39,9 @@ export default class Charts extends Component {
 
     }
     initLine(){
-
+        if(this.props.value=='snet'){
+            console.log('1111111')
+        }
         const index = this.props.index
 
         const dom = $('#' + index)
@@ -125,7 +130,7 @@ export default class Charts extends Component {
 
                 </div>
                 <div style={{float:'right',zIndex: 100,position:'relative',margin:-(this.props.height-10)+'px 120px auto auto'}}>
-                    <Select defaultValue="snet" style={{ width: 120 }} onChange={this.handleChange}>
+                    <Select value={ChooseStore.data.value}style={{ width: 120 }} onChange={this.handleChange}>
                         <Option value="stotal">启动总耗时</Option>
                         <Option value="snet">启动净耗时</Option>
                         <Option value="sload">初始化应用耗时</Option>
