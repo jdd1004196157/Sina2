@@ -1141,13 +1141,14 @@ export default class Pandect extends Component {
                 <div style={{height:10}}></div>
 
                 <div style={styles.show}>
+
                     <div style={styles.card2} >
-                        <div style={styles.span}>启动总耗时</div>
-                        {stotal}
-                    </div>
-                    <div style={styles.card3} >
                         <div style={styles.span}>启动净耗时</div>
                         {snet}
+                    </div>
+                    <div style={styles.card3} >
+                        <div style={styles.span}>启动总耗时</div>
+                        {stotal}
                     </div>
 
                 </div>
