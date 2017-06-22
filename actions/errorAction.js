@@ -8,8 +8,8 @@ import ListStore from '../stores/ListStorettt'
 
 import $ from 'jquery'
 
-var path='http://10.235.31.20:8111/'
-//var path='http://10.236.32.159:8111/'
+var path='http://10.235.31.241:8111/'
+//var path='http://10.236.30.174:8111/'
 
 //将ls这些转化
 function change(value){
@@ -81,7 +81,6 @@ function generateChartData(data,type,stack,reverse,show){
         if(reverse==1){
             for (let j = data[k].data.length-1; j >=0 ; j--) {
                 if (data[k].data[j] != 'null') {
-                    console.log(data[k].data[j])
                     item1.data.push(data[k].data[j].toFixed(2))
                     if (type == 'line') {
                         if (data[k].data[j].toFixed(2)< min) {
@@ -162,33 +161,12 @@ export function getErrorChart(para) {
         function (data) {
             ListStore.data.errorcount.flag=false
             console.log("错误统计获得的数据")
-            /*let data={
-                  result_code_top:{dataarr:[-100,-200,-50,404],
-                                    linedata: [{name:"xxx",data:[50,83.12,8.31,6.12]}]
-                                    },
-                net_error_top:{dataarr:[-100,-200,-50,404],
-                    linedata: [{name:"xxx",data:[50,83.12,8.31,6.12]}]
-                },
-                result_code_count:{dataarr:['20170601','20170602','20170603','20170604'],
-                        linedata: [{name:"net_error",data:[50,8312,831,612]},
-                                    {name:"local_error", data:[50,8312,831,612]}],},
-                errortrendresult:{dataarr:['20170601','20170602','20170603','20170604'],
-                    linedata: [{name:"net_error",data:[50,8312,831,612]},
-                        {name:"local_error", data:[50,8312,831,612]}],},
-                error_sum:{result_code_num:20000,net_error_num:28000},
-}*/
-
-           /* try{
-                data = JSON.parse(data)
-            }catch(error) {
-                data={
-
-                }
-            }*/
+            console.log(data)
             data = JSON.parse(data)
             console.log(data)
             //错误码Top10
             let errorCode=data.result_code_top
+            console.log(data.result_code_top)
             let errorCoderesult=generateChartData(errorCode.linedata,'bar',0,1,1)
             let yaxis=errorCode.dataarr
             AppStore.data.errorcount.errorCode.yAxisData.data=yaxis.reverse()
@@ -215,9 +193,6 @@ export function getErrorChart(para) {
 
             //错误码趋势
             let errortrend=data.result_code_trend
-            /*let errortrend={dataarr:['20170601','20170602','20170603','20170604'],
-                linedata: [{name:12,data:[50,8312,831,612]},
-                {name:14, data:[50,8312,831,612]}],}*/
             let errortrendresult=generateChartData(errortrend.linedata,'line',0,0,0)
             AppStore.data.errorcount.errortrend.xAxisData[0].data=errortrend.dataarr
             AppStore.data.errorcount.errortrend.data=errortrendresult[1]

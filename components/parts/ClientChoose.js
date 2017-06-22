@@ -303,7 +303,7 @@ export default class Client extends Component {
 
     render() {
         console.log(' client render')
-        const dateFormat = 'YYYY/MM/DD';
+        const dateFormat = 'YYYY-MM-DD';
 
         let styles = {
             root: {

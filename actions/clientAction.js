@@ -8,8 +8,8 @@ import ListStore from '../stores/ListStorettt'
 
 import $ from 'jquery'
 
-var path='http://10.235.31.20:8111/'
-//var path='http://10.236.31.67:8111/'
+var path='http://10.235.31.241:8111/'
+//var path='http://10.236.30.174:8111/'
 //将ls这些转化
 function change(value){
     if(value=='lw')
@@ -115,7 +115,7 @@ function getInDeRate(value){
     }
     for(let i=0;i<value[0].data.length;i++){
         if(value[0].data[i]>3) {
-            item1.data.push(((value[1].data[i] - value[0].data[i]) / value[0].data[i]).toFixed(2))
+            item1.data.push(-(((value[1].data[i] - value[0].data[i]) / value[0].data[i])*100).toFixed(2))
         }else{
             item1.data.push(0.00)
         }
@@ -222,7 +222,7 @@ export function getClientChart(para) {
             AppStore.data.client.timeRate.type = ''
 
             //缩减百分比
-            let timeDeRate = data.responseTime_general
+            let timeDeRate = data.responseTime_withoutreconnect
             let InDeRate={versionarr:[],linedata:[]}
             //InDeRate.versionarr=['dl','lw','parse_time','rb','rh','sc','sr','ssc','ws']
             let startitem={

@@ -341,7 +341,7 @@ export default class ErrorCountChoose extends Component {
         //const sysVersion = getOptions("sysVersion")
 
 
-        const dateFormat = 'YYYY/MM/DD';
+        const dateFormat = 'YYYY-MM-DD';
         const true1=true
         let all;
         if(ListStore.data.errorcount.flag){

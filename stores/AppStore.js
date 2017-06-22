@@ -810,7 +810,7 @@ var AppStore =Object.assign({}, EventEmitter.prototype, {
                     }
                 ],
                 yAxisData: {
-                    name: '时间（ms）',
+                    name: '次数（次）',
                     type:'value',
                     data:'',
                 },

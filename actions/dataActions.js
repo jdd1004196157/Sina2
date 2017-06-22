@@ -6,8 +6,9 @@ import ListStore from '../stores/ListStorettt'
 import $ from 'jquery'
 
 //var path='http://10.236.30.68:8111/'
-var path='http://10.235.31.20:8111/'
+var path='http://10.235.31.241:8111/'
 //var path='http://10.236.35.47:8111/'
+//var path='http://10.236.30.174:8111/'
 //修改要提交给接口的数据
 export function changePort(data) {
     ListStore.data.pansect.aveSumResTime.tt='none'
@@ -75,6 +76,12 @@ export function changePort(data) {
             ListStore.data.pansect.PortData.app_version=data.value
         }
     }
+    if( data.item == 'appversion' ){ // 微博版本（目前只有总览页面有）
+        if(data.page=='errorcount'){
+            ListStore.data.errorcount.PortData.app_version=data.value
+        }
+    }
+
     if( data.item == 'granularity' ){ // 颗粒度（目前只有总览页面有）
         if(data.page=='pandect'){
             ListStore.data.pansect.PortData.granularity=data.value
