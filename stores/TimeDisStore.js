@@ -7,7 +7,7 @@
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
-var AppStore2 =Object.assign({}, EventEmitter.prototype, {
+var TimeDisStore =Object.assign({}, EventEmitter.prototype, {
 
     data: {
         //**********************总览******************************／
@@ -63,7 +63,7 @@ var AppStore2 =Object.assign({}, EventEmitter.prototype, {
         this.removeListener('change', callback)
     }
 })
-module.exports = AppStore2;
+module.exports = TimeDisStore;
 
 
 

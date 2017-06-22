@@ -9,7 +9,7 @@
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
-var AppStore2 =Object.assign({}, EventEmitter.prototype, {
+var TimeTrendStore =Object.assign({}, EventEmitter.prototype, {
 
     data: {
         //**********************总览******************************／
@@ -38,7 +38,7 @@ var AppStore2 =Object.assign({}, EventEmitter.prototype, {
                 nameGap: 22,
                 boundaryGap: true,
                 dataZoom: false,
-                color: ['#d48265','#99CCCC' , '#91c7ae','#749f83' ,'#2f4554', '#61a0a8',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
+                color: ['#d48265','#99CCCC', '#91c7ae','#749f83' ,'#2f4554', '#61a0a8',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
                 animation: true,
                 data: [
                 ],
@@ -138,7 +138,7 @@ var AppStore2 =Object.assign({}, EventEmitter.prototype, {
         this.removeListener('change', callback)
     }
 })
-module.exports = AppStore2;
+module.exports = TimeTrendStore;
 
 
 
