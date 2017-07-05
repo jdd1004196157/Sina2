@@ -15,10 +15,10 @@
     "css-loader": "^0.21.0",
     "style-loader": "^0.13.0",
     "babel-cli": "^6.9.0",
-    "babel-core": "^6.9.1",
-    "babel-lnpm oader": "^6.2.4",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react": "^6.5.0",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
     "flux": "^2.1.1"
   },
   "dependencies": {
